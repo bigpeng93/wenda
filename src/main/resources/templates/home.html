@@ -1,0 +1,52 @@
+<html>
+    <body>
+        <pre>
+            #*
+                注释
+            *#
+            $!{value1}
+            $!{value2} ##如果不存在强制为空
+            ${value3}  ##如果不存在当做文本来显示
+
+            colors : $!{colors}
+
+            #foreach($color in $colors)
+                this is Color $!{foreach.index}:$color, $!{foreach.count}
+            #end
+
+            #foreach($key in $map.keySet())
+                Number : $key , Value: $map.get($key)
+            #end
+
+            #foreach($kv in $map.keySet())
+                Number : $kv.key , Value: $kv.value
+            #end
+
+            User:$!{User.name},$!{User.description}  ## 如果有getName方法才能显示出来
+            $!{User.getDescription()}
+
+            #set($title = "nowcoder")
+            Title: $!{title}
+
+            Parse:#parse("header.html")     ##解析模板有parse，静态文本用include，效率高
+            Include:#include("header.html")
+
+            ##定义宏
+            #macro(render_color,$index,$color)
+                Color Render Marco $index, $color
+            #end
+
+            #foreach($color in $colors)
+                #render_color($foreach.index, $color)
+            #end
+
+            #set($hello = "hello")
+            #set($helloworld1 = "$!{hello} world")
+            #set($helloworld2 = '$!{hello} world')
+
+            $!hello
+            $helloworld1
+            $helloworld2   ## 单引号在模板中不解析
+        </pre>
+    </body>
+</html>
