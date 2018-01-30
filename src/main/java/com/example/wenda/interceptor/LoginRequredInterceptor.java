@@ -18,12 +18,6 @@ import java.util.Date;
 @Component
 public class LoginRequredInterceptor implements HandlerInterceptor{
     @Autowired
-    LoginTicketDAO loginTicketDAO;
-
-    @Autowired
-    UserDAO userDAO;
-
-    @Autowired
     HostHolder hostHolder;
 
     @Override
@@ -40,6 +34,5 @@ public class LoginRequredInterceptor implements HandlerInterceptor{
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        hostHolder.clear();
     }
 }

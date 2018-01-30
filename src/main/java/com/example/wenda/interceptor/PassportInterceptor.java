@@ -29,6 +29,8 @@ public class PassportInterceptor  implements HandlerInterceptor{
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+
+
         String ticket = null;
         if(httpServletRequest.getCookies()!=null){
             for(Cookie cookie : httpServletRequest.getCookies()){
@@ -50,7 +52,7 @@ public class PassportInterceptor  implements HandlerInterceptor{
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        if(modelAndView != null){
+        if(modelAndView != null && hostHolder.getUser() != null){
             modelAndView.addObject("user",hostHolder.getUser());
         }
     }

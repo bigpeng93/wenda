@@ -1,6 +1,5 @@
 package com.example.wenda.controller;
 
-import com.example.wenda.aspect.LogAspect;
 import com.example.wenda.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 @Controller
 public class LoginCotroller {
-    private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginCotroller.class);
     @Autowired
     UserService userService;
 
@@ -72,7 +71,7 @@ public class LoginCotroller {
     }
 
     @RequestMapping(path = {"/reglogin/"},method = {RequestMethod.GET})
-    public String reg(Model model,
+    public String reglogin(Model model,
                       @RequestParam(value = "next",required = false) String next){
         model.addAttribute("next",next);
         return "login";
