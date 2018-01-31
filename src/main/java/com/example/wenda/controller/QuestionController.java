@@ -1,18 +1,20 @@
 package com.example.wenda.controller;
 
-import com.example.wenda.model.HostHolder;
-import com.example.wenda.model.Question;
+import com.example.wenda.model.*;
+import com.example.wenda.service.CommentService;
+import com.example.wenda.service.LikeService;
 import com.example.wenda.service.QuestionService;
+import com.example.wenda.service.UserService;
 import com.example.wenda.util.WendaUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class QuestionController {
@@ -24,6 +26,14 @@ public class QuestionController {
     @Autowired
     HostHolder hostHolder;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
+    LikeService likeService;
 
     @RequestMapping(value = "/question/add",method = {RequestMethod.POST})
     @ResponseBody
@@ -48,5 +58,30 @@ public class QuestionController {
             logger.error("增加题目失败"+e.getMessage());
         }
         return WendaUtil.getJSONString(1,"失败");
+    }
+
+    @RequestMapping(value = "/question/{qid}")
+    public String questionDetail(Model model,
+                                 @PathVariable("qid") int qid){
+        Question question= questionService.selectById(qid);
+        model.addAttribute("question",question);
+
+        List<Comment> commentList = commentService.getCommentByEntity(qid, EntityType.ENTITY_QUESTION);
+
+        List<ViewObject> comments = new ArrayList<ViewObject>();
+        for(Comment comment:commentList){
+            ViewObject vo = new ViewObject();
+            vo.set("comment",comment);
+            if(hostHolder.getUser() == null){
+                vo.set("liked",0);
+            }else{
+                vo.set("liked",likeService.getLikeStatus(hostHolder.getUser().getId(),EntityType.ENTITY_COMMENT,comment.getId()));
+            }
+            vo.set("user",userService.getUser(comment.getUserId()));
+            vo.set("likeCount",likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
+            comments.add(vo);
+        }
+        model.addAttribute("comments",comments);
+        return "detail";
     }
 }
