@@ -44,11 +44,12 @@ public class CommentController {
             comment.setEntityId(questionId);
             commentService.addComment(comment);
 
+            System.out.println(comment.getEntityId()+":"+comment.getEntityType());
             int count = commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(),count);
 
         }catch (Exception e){
-            logger.error("增加评论失败"+e.getMessage());
+            logger.error("增加评论失败:"+e.getMessage());
         }
         return "redirect:/question/"+questionId;
     }

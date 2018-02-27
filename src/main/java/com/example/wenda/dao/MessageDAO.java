@@ -14,15 +14,14 @@ public interface MessageDAO {
     @Insert({"insert into ",TABLE_NAME,"(",INSERT_FIELDS,") values (#{fromId},#{toId},#{content},#{hasRead},#{conversationId},#{createdDate})"})
     int addComment(Message message);
 
-    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where conversation_id=#{conversation_id} order by created_date desc limit #{offset},#{limit}"})
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME," where conversation_id=#{conversationId} order by created_date desc limit #{offset},#{limit}"})
     List<Message> getConversationDetail(@Param("conversationId") String conversationId,
                                         @Param("offset") int offset,
                                         @Param("limit") int limit);
 
-    @Select({"select ",INSERT_FIELDS," ,count(id) as id from ( select * from  ",TABLE_NAME,
-            " where from_id=#{userId} or to_id={userId} order by created_date desc) tt " +
-                    " group by conversation_id order by created_date desc limit #{offset},#{limit} "})
-    List<Message> getConversationList(@Param("userID") int userId,
+    @Select({"select ", INSERT_FIELDS, " , count(id) as id from ( select * from ", TABLE_NAME,
+            " where from_id=#{userId} or to_id=#{userId} order by created_date desc) tt group by conversation_id order by created_date desc limit #{offset}, #{limit}"})
+    List<Message> getConversationList(@Param("userId") int userId,
                                       @Param("offset") int offset,
                                       @Param("limit") int limit);
 
@@ -30,4 +29,6 @@ public interface MessageDAO {
     int getConversationUnreadCount(@Param("userId") int userId,
                                         @Param("conversationId") String conversationId);
 
+    @Update({"update message set has_read = 1 where has_read=0 and conversation_id=#{conversationId}"})
+    int updateHasRead(@Param("conversationId") String conversationId);
 }

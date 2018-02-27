@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.jws.soap.SOAPBinding;
 import javax.swing.text.View;
@@ -37,6 +38,7 @@ public class MessageController {
     UserService userService;
 
     @RequestMapping(path = {"/msg/addMessage"},method = {RequestMethod.POST})
+    @ResponseBody
     public String addMessage(@RequestParam("toName") String toName,
                              @RequestParam("content") String content){
         try{
@@ -49,7 +51,7 @@ public class MessageController {
             }
 
             Message message = new Message();
-            message.setCreateDate(new Date());
+            message.setCreatedDate(new Date());
             message.setFromId(hostHolder.getUser().getId());
             message.setToId(user.getId());
             message.setContent(content);
@@ -84,9 +86,10 @@ public class MessageController {
 
 
     @RequestMapping(path = {"/msg/detail"},method = {RequestMethod.GET})
-    public String getConversationDetail(Model model, @RequestParam("ConversationId") String conversationId){
+    public String getConversationDetail(Model model, @RequestParam("conversationId") String conversationId){
         try{
             List<Message> messageList = messageService.getConversationDetail(conversationId,0,10);
+            messageService.updateHasRead(conversationId);
             List<ViewObject> messages = new ArrayList<ViewObject>();
             for(Message message : messageList){
                 ViewObject vo = new ViewObject();
