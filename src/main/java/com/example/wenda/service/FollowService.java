@@ -21,7 +21,6 @@ public class FollowService {
     public boolean follow(int userId, int entityType, int entityId) {
         String followerKey = RedisKeyUtil.getFollwerKey(entityType, entityId);
         String followeeKey = RedisKeyUtil.getFollweeKey(userId, entityType);
-
         Date date = new Date();
         Jedis jedis = jedisAdapter.getJedis();
         Transaction tx = jedisAdapter.multi(jedis);

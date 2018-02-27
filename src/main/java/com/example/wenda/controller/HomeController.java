@@ -1,10 +1,7 @@
 package com.example.wenda.controller;
 
 import com.example.wenda.model.*;
-import com.example.wenda.service.CommentService;
-import com.example.wenda.service.FollowService;
-import com.example.wenda.service.QuestionService;
-import com.example.wenda.service.UserService;
+import com.example.wenda.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,9 @@ public class HomeController {
     @Autowired
     CommentService commentService;
 
+    @Autowired
+    LikeService likeService;
+
     @RequestMapping(path = {"/user/{userId}"},method = {RequestMethod.GET,RequestMethod.POST})
     public String userIndex(Model model, @PathVariable("userId") int userId){
         model.addAttribute("vos",getQuestion(userId,0,10));
@@ -43,7 +43,6 @@ public class HomeController {
         vo.set("commentCount",commentService.getUserCommentCount(userId));
         vo.set("followerCount",followService.getFollowerCount(EntityType.ENTITY_USER,userId));
         vo.set("followeeCount",followService.getFolloweeCount(userId,EntityType.ENTITY_USER));
-
 
         List<Integer> followeeIds = followService.getFollowees(userId,EntityType.ENTITY_USER,0,10);
         if(hostHolder.getUser() !=null){
@@ -89,6 +88,7 @@ public class HomeController {
             vo.set("followerCount",followService.getFollowerCount(EntityType.ENTITY_USER,uid));
             vo.set("followeeCount",followService.getFolloweeCount(uid,EntityType.ENTITY_USER));
             vo.set("commentCount",commentService.getUserCommentCount(uid));
+            vo.set("userLikeCount",likeService.getUserLikeCount(EntityType.ENTITY_COMMENT,uid));
             if(localUserId !=0){
                 vo.set("followed",followService.isFollower(localUserId,EntityType.ENTITY_USER,uid));
             }else{

@@ -44,7 +44,7 @@ public class LikeController {
                 .setEntityType(EntityType.ENTITY_COMMENT).setEntityOwnerId(comment.getUserId())
                 .setExt("questionId",String.valueOf(comment.getEntityId())));
 
-        long likeCount = likeService.like(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,commentId);
+        long likeCount = likeService.like(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,commentId,comment.getUserId());
         return WendaUtil.getJSONString(0,String.valueOf(likeCount));
     }
 
@@ -55,7 +55,8 @@ public class LikeController {
         if(hostHolder.getUser()== null){
             return WendaUtil.getJSONString(999);
         }
-        long likeCount = likeService.disLike(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,commentId);
+        Comment comment = commentService.getCommentById(commentId);
+        long likeCount = likeService.disLike(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,commentId,comment.getUserId());
         return WendaUtil.getJSONString(0,String.valueOf(likeCount));
     }
 }

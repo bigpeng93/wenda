@@ -16,6 +16,9 @@ public class RedisKeyUtil {
     private static String BIZ_FOLLOWEE = "FOLLOWEE";
     private static String BIZ_TIMELINE = "TIMELINE";
 
+    //统计user的点赞数量
+    private static String BIZ_USERLIKE = "USERLIKE";
+
     //redis中点赞的集合的key值
     public static String getLikeKey(int entityType,int entityId){
         return BIZ_LIKE + SPLIT +String.valueOf(entityType) + SPLIT+String.valueOf(entityId);
@@ -47,6 +50,9 @@ public class RedisKeyUtil {
         return BIZ_TIMELINE + SPLIT + String.valueOf(userId);
     }
 
-    //public static String likeCount(int userId,)
+    public static String getUserLikeKye(int entityType,int userId){
+        System.out.println(BIZ_USERLIKE+SPLIT +String.valueOf(entityType) + SPLIT + String.valueOf(userId));
+        return BIZ_USERLIKE+SPLIT +String.valueOf(entityType) + SPLIT + String.valueOf(userId);
+    }
 
 }
