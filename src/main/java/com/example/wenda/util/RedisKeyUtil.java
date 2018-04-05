@@ -51,7 +51,6 @@ public class RedisKeyUtil {
     }
 
     public static String getUserLikeKye(int entityType,int userId){
-        System.out.println(BIZ_USERLIKE+SPLIT +String.valueOf(entityType) + SPLIT + String.valueOf(userId));
         return BIZ_USERLIKE+SPLIT +String.valueOf(entityType) + SPLIT + String.valueOf(userId);
     }
 

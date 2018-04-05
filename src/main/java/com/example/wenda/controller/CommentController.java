@@ -37,6 +37,7 @@ public class CommentController {
             if (hostHolder.getUser() != null) {
                 comment.setUserId(hostHolder.getUser().getId());
             } else {
+                //匿名的用户
                 comment.setUserId(WendaUtil.ANONYMOUS_USERID);
             }
             comment.setCreatedDate(new Date());

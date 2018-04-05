@@ -64,9 +64,6 @@ public class LoginCotroller {
                 cookie.setPath("/");
                 response.addCookie(cookie);
 
-                /*eventProducer.fireEvent(new EventModel(EventType.LOGIN).setExt("userName",username).setExt("email","zhangdapeng66666@163.com")
-                        .setActorId((int) map.get("userId")));*/
-
                 if(StringUtils.isNotBlank(next))
                     return "redirect:"+next;
                 return "redirect:/";
